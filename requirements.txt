@@ -1,0 +1,6 @@
+pyzipper
+pikepdf
+rarfile
+py7zr
+patool
+tk-tools
