@@ -1,4 +1,4 @@
-## Description
+# Zip Cracker
 File Password Cracker is a versatile tool designed to help users crack password-protected files. The tool supports a wide range of file formats, including ZIP, PDF, RAR, 7z, gzip, bzip2, tar, wim, and xz. It provides a user-friendly graphical interface for selecting the target file and the password list, and supports both dictionary and brute-force attacks.
 
 ## Features
@@ -15,7 +15,7 @@ File Password Cracker is a versatile tool designed to help users crack password-
 ## Password Cracked Notify
 ![Screenshot 2024-07-13 111405](https://github.com/user-attachments/assets/b0ad10a5-f593-4386-8884-1322a4b07ffb)
 
-# Zip Cracker
+
 
 ## Installation
 
