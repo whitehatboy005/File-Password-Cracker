@@ -3,6 +3,7 @@ import zipfile
 import itertools
 import string
 import time
+import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import pyzipper
@@ -10,6 +11,7 @@ import pikepdf
 import rarfile
 import py7zr
 import patoolib
+from lzma import LZMAError
 
 def extract_zip(zip_path, password):
     try:
@@ -18,12 +20,16 @@ def extract_zip(zip_path, password):
             return True
     except (RuntimeError, zipfile.BadZipFile, zipfile.LargeZipFile):
         return False
+    except Exception as e:
+        return False
 
 def extract_pdf(pdf_path, password):
     try:
         with pikepdf.open(pdf_path, password=password):
             return True
     except pikepdf._qpdf.PasswordError:
+        return False
+    except Exception as e:
         return False
 
 def extract_rar(rar_path, password):
@@ -33,14 +39,19 @@ def extract_rar(rar_path, password):
             return True
     except rarfile.BadRarFile:
         return False
+    except Exception as e:
+        return False
 
 def extract_7z(seven_zip_path, password):
     try:
         with py7zr.SevenZipFile(seven_zip_path, password=password) as seven_zip_ref:
             seven_zip_ref.extractall()
             return True
-    except (RuntimeError, py7zr.Bad7zFile):
+    except (py7zr.exceptions.CrcError, py7zr.exceptions.Bad7zFile, EOFError, LZMAError, RuntimeError):
         return False
+    except Exception as e:
+        return False
+
 
 def extract_with_patool(file_path, password, archive_type):
     try:
@@ -135,7 +146,7 @@ def select_password_file():
 def start_cracking():
     if file_path.get() and password_list_path.get():
         start_time = time.time()
-        dictionary_attack(file_path.get(), password_list_path.get(), file_type.get())
+        threading.Thread(target=dictionary_attack, args=(file_path.get(), password_list_path.get(), file_type.get())).start()
         end_time = time.time()
         status_label.config(text=f"Total time taken: {end_time - start_time:.2f} seconds")
     else:
